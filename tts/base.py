@@ -2,5 +2,5 @@ from abc import ABC, abstractmethod
 
 class BaseTTS(ABC):
     @abstractmethod
-    def speak(self, text: str, output_file: str):
+    def synthesize(self, text: str, output_path: str) -> None:
         pass

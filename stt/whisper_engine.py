@@ -1,5 +1,5 @@
 import whisper
-from stt.base import BaseSTT
+from tts_stt_backend.stt.base import BaseSTT
 
 class WhisperSTTEngine(BaseSTT):
     def __init__(self, model_size="base"):
