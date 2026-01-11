@@ -21,10 +21,23 @@ from tts_stt_backend.stt.google_engine import GoogleSTTEngine
 
 from tts_stt_backend.tts.edge_tts_engine import EdgeTTSEngine
 
+from pathlib import Path
+
+# Project root (TextToSpeech/)
+BASE_DIR = Path(__file__).resolve().parents[2]
+
+# Audio output directory
+AUDIO_DIR = BASE_DIR / "output" / "audio"
+
+# Ensure directory exists
+AUDIO_DIR.mkdir(parents=True, exist_ok=True)
+
+
 STT_ENGINE = GoogleSTTEngine()
 TTS_ENGINE = EdgeTTSEngine()
 
-AUDIO_DIR = "output/audio"
+
+
 JWT_SECRET = "CHANGE_ME_SECRET"
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRE_MINUTES = 60
