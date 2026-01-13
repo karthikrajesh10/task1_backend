@@ -81,10 +81,10 @@ async def text_to_speech(text: str) -> str:
     filename = f"{uuid.uuid4()}.mp3"
     output_path = AUDIO_DIR / filename
 
-    # 🔒 BLOCK until audio is fully written
+    
     await TTS_ENGINE.synthesize(text, str(output_path))
 
-    # 🔐 safety check
+    
     if not output_path.exists() or output_path.stat().st_size == 0:
         raise RuntimeError("TTS audio generation failed")
 

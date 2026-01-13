@@ -87,6 +87,6 @@ class EdgeTTSEngine(BaseTTS):
         )
         await communicate.save(output_path)
 
-    # IMPORTANT: NOT async
+    
     def synthesize(self, text: str, output_path: str):
-        return self._run(text, output_path)  # return coroutine
+        return self._run(text, output_path)  

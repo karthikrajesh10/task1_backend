@@ -37,7 +37,7 @@ from tts_stt_backend.config.settings import AUDIO_DIR
 
 app = FastAPI(title="Voice Assistant Backend")
 
-# 🔥 SAME directory used by TTS
+
 app.mount(
     "/audio",
     StaticFiles(directory=str(AUDIO_DIR)),

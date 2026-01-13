@@ -2,7 +2,7 @@ from tts_stt_backend.services.stt_service import speech_to_text
 
 def test_malayalam_stt():
     audio_path = "tts_stt_backend/audio_test/sample_ml.wav"
-    language = "ml"  # Malayalam
+    language = "ml"  
 
     original, english = speech_to_text(audio_path, language)
 

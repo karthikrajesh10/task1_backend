@@ -70,7 +70,7 @@ MAX_BCRYPT_BYTES = 72
 
 
 def _normalize_password(password: str) -> str:
-    # bcrypt limit protection (industry practice)
+    
     encoded = password.encode("utf-8")
     if len(encoded) > MAX_BCRYPT_BYTES:
         return encoded[:MAX_BCRYPT_BYTES].decode("utf-8", errors="ignore")
