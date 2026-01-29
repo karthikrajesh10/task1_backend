@@ -7,6 +7,10 @@ models/
 **/*.pt
 **/*.ckpt
 
+# HuggingFace / cache
+.cache/
+huggingface/
+
 # --------------------
 # Python
 # --------------------
@@ -21,6 +25,13 @@ __pycache__/
 *.faiss
 *.pkl
 index/
+
+# --------------------
+# Logs / temp
+# --------------------
+logs/
+*.log
+tmp/
 
 # --------------------
 # OS
