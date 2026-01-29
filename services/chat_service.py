@@ -111,6 +111,15 @@ async def handle_text_message(text: str) -> dict:
     # 1️⃣ Retrieve context
     context = retrieve_context(text)
 
+    #  if not context.strip():
+    #     answer = "The answer is not available in the provided documents."
+    #     return {
+    #         "type": "text",
+    #         "query": text,
+    #         "english_text": answer,
+    #         "audio": None,
+    #     }
+
     # 2️⃣ Generate answer using RAG
     answer = generate_answer(context, text)
 
@@ -131,6 +140,18 @@ async def handle_voice_message(audio_path: str, language: str) -> dict:
 
     # 2️⃣ RAG
     context = retrieve_context(english_text)
+    
+    # if not context.strip():
+    #     answer = "The answer is not available in the provided documents."
+    #     return {
+    #         "type": "voice",
+    #         "original_text": original_text,
+    #         "english_text": answer,
+    #         "audio": None,
+    #     }
+
+
+
     answer = generate_answer(context, english_text)
 
     # 3️⃣ TTS
