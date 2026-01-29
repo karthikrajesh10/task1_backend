@@ -1,0 +1,29 @@
+# --------------------
+# Model files (HuggingFace / local)
+# --------------------
+models/
+**/*.safetensors
+**/*.bin
+**/*.pt
+**/*.ckpt
+
+# --------------------
+# Python
+# --------------------
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# --------------------
+# FAISS / indexes
+# --------------------
+*.faiss
+*.pkl
+index/
+
+# --------------------
+# OS
+# --------------------
+.DS_Store
+Thumbs.db
