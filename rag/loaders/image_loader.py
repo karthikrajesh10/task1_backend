@@ -83,9 +83,9 @@ class ImageLoader(BaseLoader):
                     "type": "image"
                 })
 
-                print(f"✅ OCR extracted from: {file.name}")
+                print(f" OCR extracted from: {file.name}")
 
             except Exception as e:
-                print(f"❌ OCR failed for {file.name}: {e}")
+                print(f" OCR failed for {file.name}: {e}")
 
         return documents

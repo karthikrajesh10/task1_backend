@@ -428,9 +428,9 @@ def build_index():
     )
 
     if not loaders:
-        raise RuntimeError("❌ No loaders registered. Check configuration.")
+        raise RuntimeError(" No loaders registered. Check configuration.")
 
-    # ---------- LOAD DOCUMENTS ----------
+    #  LOAD DOCUMENTS 
 
     raw_documents = []
 
@@ -439,17 +439,17 @@ def build_index():
 
         if not isinstance(loaded, list):
             raise TypeError(
-                f"❌ Loader {loader.__class__.__name__} must return List[dict]"
+                f" Loader {loader.__class__.__name__} must return List[dict]"
             )
 
         raw_documents.extend(loaded)
 
     if not raw_documents:
-        raise RuntimeError("❌ No documents loaded from any source.")
+        raise RuntimeError(" No documents loaded from any source.")
 
     print(f"📄 Loaded {len(raw_documents)} documents")
 
-    # ---------- CHUNK DOCUMENTS ----------
+    # CHUNK DOCUMENTS
 
     chunks = []
 
@@ -457,19 +457,19 @@ def build_index():
 
         if not isinstance(doc, dict):
             raise TypeError(
-                f"❌ Document #{i} is not dict → {type(doc)}"
+                f" Document #{i} is not dict → {type(doc)}"
             )
 
         if "text" not in doc:
             raise KeyError(
-                f"❌ Document #{i} missing 'text' key"
+                f" Document #{i} missing 'text' key"
             )
 
         text = doc["text"]
 
         if not isinstance(text, str):
             raise TypeError(
-                f"❌ Document #{i} 'text' is not string → {type(text)}"
+                f" Document #{i} 'text' is not string → {type(text)}"
             )
 
         if not text.strip():
@@ -481,27 +481,27 @@ def build_index():
             chunks.extend(doc_chunks)
 
     if not chunks:
-        raise RuntimeError("❌ No text chunks created.")
+        raise RuntimeError(" No text chunks created.")
 
-    print(f"✂️ Created {len(chunks)} text chunks")
+    print(f" Created {len(chunks)} text chunks")
 
-    # ---------- EMBEDDINGS ----------
+    # EMBEDDINGS 
 
     embedder = MiniLMEmbedding()
     embeddings = embedder.embed(chunks)
 
     if not isinstance(embeddings, np.ndarray):
-        raise TypeError("❌ Embeddings must be numpy array")
+        raise TypeError(" Embeddings must be numpy array")
 
     embeddings = embeddings.astype("float32")
 
-    # ---------- FAISS INDEX ----------
+    #  FAISS INDEX 
 
     dim = embeddings.shape[1]
     index = faiss.IndexFlatL2(dim)
     index.add(embeddings)
 
-    # ---------- SAVE ----------
+    #  SAVE
 
     os.makedirs(INDEX_DIR, exist_ok=True)
 
@@ -510,9 +510,9 @@ def build_index():
     with open(META_PATH, "wb") as f:
         pickle.dump(chunks, f)
 
-    print("✅ FAISS index built successfully")
-    print(f"📦 Index path: {INDEX_PATH}")
-    print(f"📦 Metadata path: {META_PATH}")
+    print(" FAISS index built successfully")
+    print(f" Index path: {INDEX_PATH}")
+    print(f" Metadata path: {META_PATH}")
 
 
 # ---------------- ENTRYPOINT ----------------
