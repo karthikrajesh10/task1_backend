@@ -1,0 +1,60 @@
+# -----------------------------
+# Core backend
+# -----------------------------
+fastapi
+uvicorn
+python-multipart
+pydantic
+python-dotenv
+
+# -----------------------------
+# Authentication & Security
+# -----------------------------
+passlib[bcrypt]
+python-jose[cryptography]
+
+# -----------------------------
+# Async / Networking
+# -----------------------------
+aiohttp
+requests
+
+# -----------------------------
+# Speech To Text (STT)
+# -----------------------------
+SpeechRecognition
+pydub
+
+# -----------------------------
+# Text To Speech (TTS)
+# -----------------------------
+edge-tts
+
+# -----------------------------
+# RAG - Embeddings & Vector DB
+# -----------------------------
+sentence-transformers
+faiss-cpu
+numpy
+scikit-learn
+
+# -----------------------------
+# RAG - LLM (Offline)
+# -----------------------------
+torch
+transformers
+accelerate
+
+# -----------------------------
+# Document Loaders
+# -----------------------------
+pypdf
+pandas
+openpyxl
+pytesseract
+Pillow
+
+# -----------------------------
+# Optional (DB loaders)
+# -----------------------------
+sqlite-utils
