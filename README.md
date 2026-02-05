@@ -2,232 +2,125 @@
 
 This backend powers a chatbot-style voice assistant that supports:
 
-✅ User authentication (Signup & Login)
+-   User Authentication (Signup & Login)
+-   Text-to-Speech (TTS)
+-   Speech-to-Text (STT) with multi-language support
+-   Retrieval-Augmented Generation (RAG) from local documents (offline)
+-   REST APIs exposed via FastAPI
+-   Interactive API testing using Swagger UI
 
-✅ Text-to-Speech (TTS)
+------------------------------------------------------------------------
 
-✅ Speech-to-Text (STT) with multi-language support
+ARCHITECTURE OVERVIEW
 
-✅ Retrieval-Augmented Generation (RAG) from local documents (offline)
+Frontend (Streamlit) | | HTTP (JSON / Multipart) v FastAPI Backend ├──
+Auth (JWT) ├── Chat API │ ├── STT (voice → text) │ ├── RAG (retrieve +
+generate) │ └── TTS (text → audio) ├── FAISS Vector DB (offline) └──
+Local LLM + Embeddings
 
-✅ REST APIs exposed via FastAPI
+------------------------------------------------------------------------
 
-✅ Interactive API testing using Swagger UI
+MAIN API ROUTES
 
-🏗️ Architecture Overview
-Frontend (Streamlit)
-        |
-        |  HTTP (JSON / Multipart)
-        v
-FastAPI Backend
- ├── Auth (JWT)
- ├── Chat API
- │    ├── STT (voice → text)
- │    ├── RAG (retrieve + generate)
- │    └── TTS (text → audio)
- ├── FAISS Vector DB (offline)
- └── Local LLM + Embeddings
+1)  Signup POST /auth/signup
 
-🔑 Main API Routes
+Request: { “username”: “user1”, “password”: “password123” }
 
-The backend exposes 3 primary routes:
+Response: { “message”: “User created successfully” }
 
-1️⃣ Signup
+------------------------------------------------------------------------
 
-POST /auth/signup
+2)  Login POST /auth/login
 
-Creates a new user account.
+Request: { “username”: “user1”, “password”: “password123” }
 
-Request (JSON):
+Response: { “access_token”: “eyJhbGciOiJIUzI1NiIs…”, “token_type”:
+“bearer” }
 
-{
-  "username": "user1",
-  "password": "password123"
-}
+This token must be sent in the Authorization header for protected APIs.
 
+------------------------------------------------------------------------
 
-Response:
+3)  Chat (Text or Voice) POST /chat
 
-{
-  "message": "User created successfully"
-}
+Headers: Authorization: Bearer
 
-2️⃣ Login
+Text Input (Form-data): text = “What is the Trademark Act?” language =
+“en”
 
-POST /auth/login
+Voice Input (Form-data): audio = voice.wav language = “ml” / “hi” / “en”
 
-Authenticates the user and returns a JWT access token.
+Response: { “type”: “voice”, “original_text”: “example”, “english_text”:
+“example”, “audio”: “/audio/abc123.mp3” }
 
-Request (JSON):
+------------------------------------------------------------------------
 
-{
-  "username": "user1",
-  "password": "password123"
-}
+SWAGGER API DOCUMENTATION
 
+Open in browser after starting server: http://127.0.0.1:8000/docs
 
-Response:
+You can test APIs, upload audio, and pass JWT tokens directly.
 
-{
-  "access_token": "eyJhbGciOiJIUzI1NiIs...",
-  "token_type": "bearer"
-}
+------------------------------------------------------------------------
 
+RAG (Retrieval-Augmented Generation)
 
-This token must be sent in the Authorization header for all protected APIs.
+Supported document sources: - .txt - .pdf - .xlsx, .csv - Images (OCR) -
+SQLite databases
 
-3️⃣ Chat (Text or Voice)
+RAG Flow: 1. Load documents 2. Chunk text 3. Create embeddings using
+MiniLM 4. Store in FAISS 5. Retrieve relevant chunks and generate
+answers using LLM
 
-POST /chat
+No internet knowledge is used at inference time.
 
-This is the core endpoint.
+------------------------------------------------------------------------
 
-It supports:
+SPEECH MODULES
 
-📝 Text input → RAG → Answer → Audio
+Speech-to-Text (STT): - Google Speech Recognition - Multi-language
+support - Voice to English text
 
-🎙️ Voice input → STT → RAG → Answer → Audio
+Text-to-Speech (TTS): - Microsoft Edge Neural Voices - Text to audio
+output - Served via /audio route
 
-Headers:
+------------------------------------------------------------------------
 
-Authorization: Bearer <access_token>
+BACKEND SETUP
 
-Text input
-Form-data:
-text = "What is the Trademark Act?"
-language = "en"
+1)  Clone repository git clone cd tts_stt_backend
 
-Voice input
-Form-data:
-audio = voice.wav
-language = "ml" / "hi" / "en"
+2)  Create virtual environment python -m venv venv venv
 
+3)  Install dependencies pip install -r requirements.txt
 
-Response:
+4)  Build RAG index python -m tts_stt_backend.rag.build_index
 
-{
-  "type": "voice",
-  "original_text": "എന്റെ പേര് കാർത്തിക",
-  "english_text": "My name is Karthik",
-  "audio": "/audio/abc123.mp3"
-}
+5)  Start server uvicorn tts_stt_backend.api.main:app –reload
 
-📚 Swagger API Documentation
+------------------------------------------------------------------------
 
-This backend uses Swagger (OpenAPI) for API documentation and testing.
-
-After starting the server, open:
-
-👉 http://127.0.0.1:8000/docs
-
-Swagger allows you to:
-
-View all available APIs
-
-Send requests without Postman
-
-Upload audio files
-
-Pass JWT tokens
-
-Inspect responses visually
-
-Swagger UI replaces the need for Postman in this project.
-
-🧠 RAG (Retrieval-Augmented Generation)
-
-The chatbot answers questions using only local documents.
-
-Supported document sources:
-
-📄 .txt
-
-📕 .pdf
-
-📊 .xlsx, .csv
-
-🖼️ Images (OCR)
-
-🗄️ Databases (SQLite)
-
-RAG Flow:
-
-Documents are loaded
-
-Text is chunked
-
-Chunks are embedded (MiniLM)
-
-Stored in FAISS
-
-On query → retrieve top chunks → generate answer using LLM
-
-⚠️ No internet knowledge is used at inference time.
-
-🔊 Speech Modules
-Speech-to-Text (STT)
-
-Uses Google Speech Recognition
-
-Supports multiple languages
-
-Converts voice → English text
-
-Text-to-Speech (TTS)
-
-Uses Microsoft Edge Neural Voices
-
-Converts generated answers → audio
-
-Audio is served via /audio/* static route
-
-⚙️ Backend Setup Instructions
-1️⃣ Clone repository
-git clone <repo-url>
-cd tts_stt_backend
-
-2️⃣ Create virtual environment
-python -m venv venv
-venv\Scripts\activate   # Windows
-
-3️⃣ Install dependencies
-pip install -r requirements.txt
-
-4️⃣ Build RAG index (one-time)
-python -m tts_stt_backend.rag.build_index
-
-5️⃣ Start backend server
-uvicorn tts_stt_backend.api.main:app --reload
-
-📦 Audio Output
-
-Generated audio files are stored and served from:
+AUDIO OUTPUT LOCATION
 
 tts_stt_backend/output/audio/
 
+Access: http://127.0.0.1:8000/audio/.mp3
 
-Accessible via:
+------------------------------------------------------------------------
 
-http://127.0.0.1:8000/audio/<filename>.mp3
+SECURITY NOTES
 
-🔒 Security Notes
+-   Passwords hashed with bcrypt
+-   JWT required for protected routes
+-   RAG uses only local data
 
-Passwords are hashed using bcrypt
+------------------------------------------------------------------------
 
-JWT tokens are required for protected routes
+SUMMARY
 
-No external APIs are called for RAG answers
-
-✅ Summary
-
-✔ FastAPI backend
-
-✔ JWT-based auth
-
-✔ Text + Voice chat
-
-✔ Offline RAG
-
-✔ Swagger-based testing
-
-✔ Modular & extensible design
+-   FastAPI backend
+-   JWT authentication
+-   Text and Voice chat
+-   Offline RAG
+-   Swagger testing
+-   Modular architecture
